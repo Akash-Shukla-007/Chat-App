@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Work Sans', sans-serif;
+    /* background-color: #130f40; */
+    /* background-image: linear-gradient(315deg, #130f40 0%, #000000 74%); */
+}
+.root-chat{
+    background-color: #e3efe8;
+    background-image: linear-gradient(315deg, #e3efe8 0%, #96a7cf 74%);
+
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #addbec; 
+    margin-left: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #addbec; 
+  }
+
+
+
+  .message-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-top: 6%;
+    height: 100%;
+  }
