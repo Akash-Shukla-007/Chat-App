@@ -18,7 +18,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   pingTimeout: 6000,
   cors: {
-    origin: ["http://localhost:5173", "*"],
+    origin: ["http://localhost:5173", "*", "https://chatbox-c1b7e.web.app"],
   },
 });
 io.on("connection", (socket: any) => {
