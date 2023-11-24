@@ -22,7 +22,7 @@ const ChatProvider = ({ children }: any) => {
 
   const fetchChat = async () => {
     const { data } = await fetchChats();
-    console.log("res ->", data.result);
+    // console.log("res ->", data.result);
     setChats(data.result);
   };
   useEffect(() => {

@@ -5,8 +5,6 @@ import { Avatar } from "@chakra-ui/react";
 
 function ScrollableChat({ messages }: { messages?: any }) {
   const { user }: any = ChatState();
-  let len = messages.length - 1;
-  console.log(len);
   return (
     <ScrollableFeed>
       {messages?.map((message: any, index: any) => {

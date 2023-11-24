@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
   FormControl,
   IconButton,
-  Image,
+  // Image,
   Input,
   Modal,
   ModalBody,
@@ -13,7 +13,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
+  // Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -30,13 +30,13 @@ import {
 } from "../../../services/httpServices";
 import SearchUserBox from "../SearchUserBox";
 
-function EditGroupModal({ children }: { user?: any; children?: any }) {
+function EditGroupModal() {
   const toast = useToast();
   const { selectedChat, setSelectedChat }: any = ChatState();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [groupName, setGroupName] = useState("");
-  const [selectUsers, setSelectUsers] = useState<any>([]);
+  // const [selectUsers, setSelectUsers] = useState<any>([]);
   const [search, setSearch] = useState("");
   const [searchedResult, setSearchedResult] = useState<any>([]);
   const [loading, setLoading] = useState(false);
@@ -48,7 +48,7 @@ function EditGroupModal({ children }: { user?: any; children?: any }) {
         groupId: selectedChat._id,
         userId: id,
       });
-      console.log(data);
+      // console.log(data);
       setLoading(false);
       setSelectedChat((pre: any) => {
         return { ...pre, users: data.users };
@@ -67,7 +67,7 @@ function EditGroupModal({ children }: { user?: any; children?: any }) {
     setLoading(true);
     try {
       const { data } = await searchUser(query);
-      console.log(data);
+      // console.log(data);
       setSearchedResult(data.users);
       setLoading(false);
     } catch (error: any) {
@@ -173,6 +173,7 @@ function EditGroupModal({ children }: { user?: any; children?: any }) {
             <FormControl>
               <Input
                 placeholder="Add Users to Group"
+                value={search}
                 onChange={(e) => handleSearch(e.target.value)}
               ></Input>
             </FormControl>

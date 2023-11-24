@@ -5,9 +5,10 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spinner,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import cloudinaryUrl from "../../../config";
 import NameValidator from "../../helper/NameValidatore";
@@ -22,6 +23,9 @@ export default function Auth({ isSignup }: { isSignup?: boolean }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pic, setPic] = useState(null);
+  const [profileLoading, setProfileLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const [guestCred, setGuestCred] = useState(false);
 
   const navigate = useNavigate();
 
@@ -36,6 +40,8 @@ export default function Auth({ isSignup }: { isSignup?: boolean }) {
       data.append("file", pic);
       data.append("upload_preset", "Image-Uploader");
       data.append("cloud_name", "dtnbdozcb");
+      setProfileLoading(true);
+
       fetch(cloudinaryUrl, {
         method: "post",
         body: data,
@@ -43,6 +49,7 @@ export default function Auth({ isSignup }: { isSignup?: boolean }) {
         .then((res) => res.json())
         .then((data) => {
           setPic(data.url.toString());
+          setProfileLoading(false);
           // console.log(data.url.toString());
         })
         .catch((err) => {
@@ -51,27 +58,33 @@ export default function Auth({ isSignup }: { isSignup?: boolean }) {
     }
   };
 
+  useEffect(() => {
+    setEmail("guest@gmail.com");
+    setPassword("Guest@123");
+  }, [guestCred]);
+
   const handleSubmit = () => {
     if (isSignup) {
       if (NameValidator(name) === true) {
         if (EmailValidator(email) === true) {
           if (PasswordValidator(password) === true) {
-            if (pic !== null) {
-              return signUp(
-                pic !== null
-                  ? { name, email, password, pic }
-                  : { name, email, password }
-              )
-                .then((res: any) => {
-                  console.log(res.data);
-                  localStorage.setItem("User", JSON.stringify(res.data.User));
-                  navigate("/chat");
-                })
-                .catch((err: any) => {
-                  toast.error(err.message);
-                });
-            }
-            return toast.error("Picture is Required");
+            setLoading(true);
+            return signUp(
+              pic !== null
+                ? { name, email, password, pic }
+                : { name, email, password }
+            )
+              .then((res: any) => {
+                // console.log(res.data);
+                localStorage.setItem("User", JSON.stringify(res.data.User));
+                setLoading(false);
+                navigate("/chat");
+              })
+              .catch((err: any) => {
+                setLoading(false);
+
+                toast.error(err.message);
+              });
           }
           return toast.error(PasswordValidator(password));
         }
@@ -81,16 +94,19 @@ export default function Auth({ isSignup }: { isSignup?: boolean }) {
     }
     if (email === "" || password === "")
       return toast.error("Fill required fields");
+    setLoading(true);
 
     logIn({ email, password })
       .then((res: any) => {
-        console.log(res.data);
+        // console.log(res.data);
         localStorage.setItem("User", JSON.stringify(res.data.User));
+        setLoading(false);
         navigate("/chat");
       })
       .catch((err: any) => {
         toast.error(err.response.data.message);
-        console.log(err);
+        setLoading(false);
+        // console.log(err);
       });
   };
 
@@ -143,20 +159,29 @@ export default function Auth({ isSignup }: { isSignup?: boolean }) {
             type="file"
             accept="image/png"
           />
+          {profileLoading && <Spinner />}
         </FormControl>
       )}
-      <Button w={"100%"} mt={"20px"} colorScheme="blue" onClick={handleSubmit}>
+      <Button
+        isDisabled={profileLoading || loading}
+        w={"100%"}
+        mt={"20px"}
+        colorScheme="blue"
+        onClick={handleSubmit}
+      >
         Submit
       </Button>
+      {loading && <Spinner size={"lg"} />}
       {!isSignup && (
         <Button
           w={"100%"}
           mt={"10px"}
           colorScheme="red"
           onClick={() => {
+            setGuestCred(true);
             setEmail("guest@gmail.com");
             setPassword("Guest@123");
-            handleSubmit;
+            handleSubmit();
           }}
         >
           Get Guest Credentials

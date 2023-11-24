@@ -1,11 +1,10 @@
 import { Box } from "@chakra-ui/react";
-import React from "react";
 import { ChatState } from "../../context/ChatContext";
 import SingleChat from "./SingleChat";
 
 function DescriptiveChat() {
   const { selectedChat }: any = ChatState();
-  console.log(selectedChat);
+  // console.log(selectedChat);
   return (
     <>
       <Box
@@ -20,7 +19,8 @@ function DescriptiveChat() {
         width={"100%"}
         borderWidth={"1px"}
         bg="#EDF2F7"
-        height={{ base: "88.5vh", md: "86vh", lg: "86vh" }}
+        // height={{ base: "86vh", md: "86vh", lg: "86vh" }}
+        height={"86vh"}
       >
         <SingleChat />
       </Box>

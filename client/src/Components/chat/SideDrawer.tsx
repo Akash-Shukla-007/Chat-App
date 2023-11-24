@@ -28,13 +28,11 @@ import { accesChat, searchUser } from "../../services/httpServices";
 import { toast } from "react-toastify";
 import UserSkelton from "./UserSkelton";
 import SearchUserBox from "./SearchUserBox";
-import NotificationBadge from "react-notification-badge";
-import { Effect } from "react-notification-badge";
 
 function SideDrawer() {
   const {
     setSelectedChat,
-    selectedChat,
+    // selectedChat,
     user,
     chats,
     setChats,
@@ -54,13 +52,13 @@ function SideDrawer() {
       setLoading(true);
       try {
         const response = await searchUser(searchText);
-        console.log(response.data);
+        // console.log(response.data);
         setSearchedUser(response.data.users);
         setLoading(false);
       } catch (error: any) {
         setLoading(false);
         toast.error(error.message);
-        console.log(error);
+        // console.log(error);
       }
     }
   };
@@ -81,21 +79,19 @@ function SideDrawer() {
     setChatLoading(true);
     try {
       const { data } = await accesChat({ userId: id });
-      console.log(data);
+      // console.log(data);
       if (!chats.find((chat: any) => chat._id === data._id)) {
-        console.log("user not in chat");
-        console.log(chats);
+        // console.log("user not in chat");
         setChats((pre: any) => [...data, ...pre]);
-        console.log(chats);
       }
       // console.log(chats);
-      console.log(selectedChat, data);
+      // console.log(selectedChat, data);
       // setSelectedChat(data);
       setChatLoading(false);
       onClose();
     } catch (error: any) {
       toast.error(error.message);
-      console.log(error);
+      // console.log(error);
       setChatLoading(false);
     }
   };
@@ -127,10 +123,27 @@ function SideDrawer() {
         <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
           <Menu>
             <MenuButton p={1}>
-              <NotificationBadge
-                count={notifications?.length}
-                effect={Effect.SCALE}
-              />
+              {notifications?.length !== 0 && (
+                <Text
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    position: "absolute",
+                    backgroundColor: "red",
+                    marginTop: "-8px",
+                    marginLeft: "5px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "10px",
+                    borderRadius: "50%",
+                    aspectRatio: 1,
+                    color: "white",
+                  }}
+                >
+                  {notifications?.length}
+                </Text>
+              )}
               <img src={Bellicon} width={20} />
             </MenuButton>
             <MenuList p={2}>

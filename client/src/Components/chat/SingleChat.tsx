@@ -18,13 +18,12 @@ import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
 import Lottie from "react-lottie";
 import amitmationData from "../../lotties/Typing.json";
-import { useNavigate } from "react-router-dom";
 
-var ENDPOINT = "http://localhost:8000";
+// var ENDPOINT = "http://localhost:8000";
+var ENDPOINT = "https://chat-app-server-fhl6.onrender.com";
 var socket: any, selectedChatCompare: any;
 
 function SingleChat() {
-  const navigate = useNavigate();
   const toast = useToast();
   const {
     selectedChat,
@@ -36,13 +35,12 @@ function SingleChat() {
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState<any>([]);
   const [messages, setMessages] = useState<any>([]);
-  const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.on("connection", () => setSocketConnected(true));
+    socket.on("connection");
     socket.emit("setup", user);
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop-typing", () => setIsTyping(false));
@@ -55,12 +53,12 @@ function SingleChat() {
     try {
       setLoading(true);
       const { data } = await fetchAllMessages({ chatId: selectedChat._id });
-      console.log(data);
+      // console.log(data);
       setMessages(data);
       setLoading(false);
       socket.emit("join-room", selectedChat);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      // console.log(error.message);
     }
   };
   // useEffect(() => {
@@ -99,11 +97,11 @@ function SingleChat() {
           chatId: selectedChat._id,
           content: newMessage,
         });
-        console.log(data);
+        // console.log(data);
         socket.emit("new-message", data);
         setNewMessage("");
         setMessages([...messages, data]);
-        console.log("socket Conectyed  -> ", socketConnected);
+        // console.log("socket Conectyed  -> ", socketConnected);
       } catch (error) {
         console.log(error);
       }
@@ -123,7 +121,7 @@ function SingleChat() {
     setTimeout(() => {
       var timeNow = new Date().getTime();
       let timeDiff = timeNow - lastTypingTime;
-      console.log(timeDiff >= 3000, typing);
+      // console.log(timeDiff >= 3000, typing);
       if (timeDiff >= timer && typing) {
         socket.emit("stop-typing", selectedChat._id);
         setTyping(false);
@@ -136,7 +134,7 @@ function SingleChat() {
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
-  console.log(" ------------------------> ", notifications);
+  // console.log(" ------------------------> ", notifications);
 
   const defaultOptions = {
     loop: true,

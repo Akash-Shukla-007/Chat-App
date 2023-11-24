@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8000",
+  // baseURL: "http://localhost:8000",
+  baseURL: "https://chat-app-server-fhl6.onrender.com",
 });
 API.interceptors.request.use(
   (req: any) => {
@@ -9,7 +10,6 @@ API.interceptors.request.use(
     if (User !== null) {
       let Token = JSON.parse(User).Token;
       req.headers.authorization = `Bearer ${Token}`;
-      console.log(Token);
     }
     return req;
   },

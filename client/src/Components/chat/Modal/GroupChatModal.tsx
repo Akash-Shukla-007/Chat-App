@@ -9,7 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
+  Spinner,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
@@ -35,7 +35,7 @@ function GroupChatModal({ children }: { user?: any; children?: any }) {
     setLoading(true);
     try {
       const { data } = await searchUser(query);
-      console.log(data);
+      // console.log(data);
       setSearchedResult(data.users);
       setLoading(false);
     } catch (error: any) {
@@ -72,7 +72,7 @@ function GroupChatModal({ children }: { user?: any; children?: any }) {
         name: groupName,
         users: JSON.stringify(selectUsers),
       });
-      console.log(data);
+      // console.log(data);
       setChats([data, ...chats]);
       onClose();
       return toast({ title: "Group Created", status: "success" });
@@ -83,6 +83,7 @@ function GroupChatModal({ children }: { user?: any; children?: any }) {
   };
 
   useEffect(() => {
+    setSearchedResult([]);
     handleSearch;
   }, [search]);
 
@@ -135,19 +136,19 @@ function GroupChatModal({ children }: { user?: any; children?: any }) {
               })}
             </Box>
             <Box maxHeight={"250px"} overflowY={"scroll"} width={"100%"}>
-              {!searchedResult ? (
-                <Text>Loading</Text>
-              ) : (
-                searchedResult.map((item: any, index: any) => {
-                  return (
-                    <SearchUserBox
-                      key={index}
-                      user={item}
-                      handleFucntion={() => handleGroup(item)}
-                    />
-                  );
-                })
-              )}
+              {loading && <Spinner />}
+
+              {searchedResult.length == 0
+                ? "No Result"
+                : searchedResult.map((item: any, index: any) => {
+                    return (
+                      <SearchUserBox
+                        key={index}
+                        user={item}
+                        handleFucntion={() => handleGroup(item)}
+                      />
+                    );
+                  })}
             </Box>
           </ModalBody>
 
